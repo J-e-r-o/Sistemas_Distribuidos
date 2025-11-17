@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -72,12 +72,33 @@ WSGI_APPLICATION = 'ki_um_core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# settings.py
+
+# ... otras configuraciones
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # Usamos el motor de MySQL ya que es el que definieron para persistencia [cite: 57]
+        'ENGINE': 'django.db.backends.mysql',
+        
+        # El HOST debe coincidir con el nombre del servicio de la DB en docker-compose.yml
+        # El nombre del servicio es 'db'
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
+
+        # Las credenciales se obtienen de las variables de entorno (desde el archivo .env)
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        
+        # Configuraciones adicionales recomendadas para MySQL
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
+
+# ... resto de las configuraciones
 
 
 # Password validation
