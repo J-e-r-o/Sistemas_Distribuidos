@@ -37,6 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework', # Para implementar las API REST
+    'channels',       # Para implementar WebSockets
+    'corsheaders',    # Para permitir la comunicación desde el Frontend (React)
+    
+    'productos', 
+    'pedidos',
+
 ]
 
 MIDDLEWARE = [
@@ -49,13 +57,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 
-    'rest_framework', # Para implementar las API REST
-    'channels',       # Para implementar WebSockets
-    'corsheaders',    # Para permitir la comunicación desde el Frontend (React)
     
-    'productos', 
-    'pedidos',
-
 ]
 
 ROOT_URLCONF = 'ki_um_core.urls'
