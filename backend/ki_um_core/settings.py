@@ -47,6 +47,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
+    'rest_framework', # Para implementar las API REST
+    'channels',       # Para implementar WebSockets
+    'corsheaders',    # Para permitir la comunicación desde el Frontend (React)
+    
+    'productos', 
+    'pedidos',
+
 ]
 
 ROOT_URLCONF = 'ki_um_core.urls'
