@@ -16,7 +16,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     build-essential \
     pkg-config \
-    libmysqlclient-dev \
+    libmariadb-dev-compat \
     && rm -rf /var/lib/apt/lists/*
 # [FIN DE LA CORRECCIÓN]
 
