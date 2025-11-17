@@ -6,9 +6,25 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# ... líneas anteriores
+
 # 3. Working Directory: Define el directorio de trabajo dentro del contenedor.
-# Aquí es donde se copiará y ejecutará la aplicación.
 WORKDIR /app
+
+# [INICIO DE LA CORRECCIÓN]
+# Instala las librerías de sistema necesarias para compilar mysqlclient.
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    pkg-config \
+    libmysqlclient-dev \
+    && rm -rf /var/lib/apt/lists/*
+# [FIN DE LA CORRECCIÓN]
+
+# 4. Dependencies: Copia el archivo de dependencias (requirements.txt) y las instala.
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# ... líneas posteriores
 
 # 4. Dependencies: Copia el archivo de dependencias (requirements.txt) y las instala.
 # Esto es más eficiente, ya que solo reinstala las dependencias si este archivo cambia.
