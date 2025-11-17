@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # Servicio de Base de Datos (MySQL) - Capa de Datos [cite: 57]
+  db:
+    image: mysql:8.0
+    container_name: ki_um_db
+    # Las credenciales de la DB se toman del archivo .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      # Exponer el puerto para acceso directo (opcional para desarrollo)
+      - "3306:3306"
+    # Mantiene los datos persistentes incluso si el contenedor se reinicia o elimina
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # Servicio de Lógica de Negocio (Django) - Backend [cite: 56]
+  backend:
+    build: ./backend # Construye la imagen a partir del Dockerfile dentro de la carpeta 'backend'
+    container_name: ki_um_backend
+    # Comando inicial para ejecutar el servidor de desarrollo de Django
+    command: python manage.py runserver 0.0.0.0:8000
+    # Monta el código fuente para que los cambios se reflejen sin reconstruir la imagen
+    volumes:
+      - ./backend:/app
+    ports:
+      # Mapea el puerto 8000 de la máquina al puerto 8000 del contenedor
+      - "8000:8000"
+    # Carga variables de entorno para la conexión a la DB y otros secretos
+    env_file:
+      - ./.env
+    # Asegura que el servicio 'db' esté listo antes de iniciar el 'backend'
+    depends_on:
+      - db
+
+  # [OPCIONAL - DESCOMENTAR CUANDO TENGAN EL FRONT END LISTO]
+  # Servicio de Presentación (React) - Frontend [cite: 55]
+  # frontend:
+  #   build: ./frontend
+  #   container_name: ki_um_frontend
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend:/app
+
+# Definición del volumen para la persistencia de la base de datos
+volumes:
+  db_data:

@@ -1,0 +1,5 @@
+Django>=4.2
+djangorestframework #Rest framework para Django
+mysqlclient         #MySQL
+django-cors-headers # Útil para la comunicación entre Frontend (3000) y Backend (8000)
+channels            # Para manejar WebSockets 
