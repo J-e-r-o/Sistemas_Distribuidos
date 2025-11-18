@@ -25,6 +25,6 @@ urlpatterns = [
     # Rutas para nuestra API REST
     # Todos los endpoints de Productos se servirán bajo el prefijo 'api/v1/'
     path('api/v1/', include('productos.urls')),
-    
+    path('api/v1/', include('pedidos.urls')),  
     # Aquí podríamos agregar más rutas en el futuro, ej: path('api/v1/', include('pedidos.urls')),
 ]
