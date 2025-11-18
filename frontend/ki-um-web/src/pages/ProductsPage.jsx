@@ -1,8 +1,8 @@
 // src/pages/ProductsPage.jsx
 import React, { useEffect, useState } from "react";
-import { fetchPedidos } from "../api";
+import { fetchProductos } from "../api";
 
-function ProductsPage({ onLogout }) {
+function ProductsPage({ onLogout, user }) {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
@@ -10,7 +10,7 @@ function ProductsPage({ onLogout }) {
   useEffect(() => {
     const cargarProductos = async () => {
       try {
-        const data = await fetchPedidos();
+        const data = await fetchProductos();
         setProductos(data);
       } catch (err) {
         setErrorMsg(err.message || "Error al cargar los productos");
@@ -22,13 +22,11 @@ function ProductsPage({ onLogout }) {
     cargarProductos();
   }, []);
 
-  if (loading) {
-    return <p>Cargando productos...</p>;
-  }
+  if (loading) return <p>Cargando productos...</p>;
 
   if (errorMsg) {
     return (
-      <div>
+      <div className="card">
         <p className="error">{errorMsg}</p>
         <button onClick={onLogout}>Volver al login</button>
       </div>
@@ -38,7 +36,10 @@ function ProductsPage({ onLogout }) {
   return (
     <div className="card">
       <div className="header-row">
-        <h2>Listado de productos</h2>
+        <div>
+          <h2>Catálogo de productos</h2>
+          {user && <p style={{ fontSize: 14 }}>Logueado como: <b>{user.username}</b></p>}
+        </div>
         <button onClick={onLogout}>Cerrar sesión</button>
       </div>
 
@@ -50,15 +51,21 @@ function ProductsPage({ onLogout }) {
             <tr>
               <th>ID</th>
               <th>Producto</th>
+              <th>Descripción</th>
               <th>Precio</th>
+              <th>Stock</th>
+              <th>Disponible</th>
             </tr>
           </thead>
           <tbody>
             {productos.map((p) => (
               <tr key={p.id}>
                 <td>{p.id}</td>
-                <td>{p.nombre || p.nombre_producto}</td>
+                <td>{p.nombre}</td>
+                <td>{p.descripcion}</td>
                 <td>${p.precio}</td>
+                <td>{p.stock_actual}</td>
+                <td>{p.esta_disponible ? "Sí" : "No"}</td>
               </tr>
             ))}
           </tbody>
