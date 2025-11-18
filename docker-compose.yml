@@ -18,6 +18,13 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+    healthcheck: 
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pTU_MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 20s # Espera inicial para que la DB arranque
+
   # Servicio de Lógica de Negocio (Django) - Backend [cite: 56]
   backend:
     build: ./backend # Construye la imagen a partir del Dockerfile dentro de la carpeta 'backend'
@@ -35,7 +42,8 @@ services:
       - ./.env
     # Asegura que el servicio 'db' esté listo antes de iniciar el 'backend'
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   # [OPCIONAL - DESCOMENTAR CUANDO TENGAN EL FRONT END LISTO]
   # Servicio de Presentación (React) - Frontend [cite: 55]
