@@ -14,9 +14,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# ki_um_core/urls.py
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # Rutas para nuestra API REST
+    # Todos los endpoints de Productos se servirán bajo el prefijo 'api/v1/'
+    path('api/v1/', include('productos.urls')),
+    
+    # Aquí podríamos agregar más rutas en el futuro, ej: path('api/v1/', include('pedidos.urls')),
 ]
